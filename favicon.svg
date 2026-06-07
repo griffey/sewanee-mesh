@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#582C83"/>
+
+  <!-- Mesh edges (lines between nodes) -->
+  <!-- Top-left to top-right -->
+  <line x1="7" y1="8" x2="25" y2="8" stroke="#FFB81C" stroke-width="1.4" stroke-opacity="0.7"/>
+  <!-- Top-left to center -->
+  <line x1="7" y1="8" x2="16" y2="17" stroke="#FFB81C" stroke-width="1.4" stroke-opacity="0.7"/>
+  <!-- Top-right to center -->
+  <line x1="25" y1="8" x2="16" y2="17" stroke="#FFB81C" stroke-width="1.4" stroke-opacity="0.7"/>
+  <!-- Top-left to bottom-left -->
+  <line x1="7" y1="8" x2="7" y2="26" stroke="#FFB81C" stroke-width="1.4" stroke-opacity="0.7"/>
+  <!-- Top-right to bottom-right -->
+  <line x1="25" y1="8" x2="25" y2="26" stroke="#FFB81C" stroke-width="1.4" stroke-opacity="0.7"/>
+  <!-- Center to bottom-left -->
+  <line x1="16" y1="17" x2="7" y2="26" stroke="#FFB81C" stroke-width="1.4" stroke-opacity="0.7"/>
+  <!-- Center to bottom-right -->
+  <line x1="16" y1="17" x2="25" y2="26" stroke="#FFB81C" stroke-width="1.4" stroke-opacity="0.7"/>
+  <!-- Bottom-left to bottom-right -->
+  <line x1="7" y1="26" x2="25" y2="26" stroke="#FFB81C" stroke-width="1.4" stroke-opacity="0.7"/>
+
+  <!-- Nodes (circles on top of lines) -->
+  <circle cx="7"  cy="8"  r="2.8" fill="#FFB81C"/>
+  <circle cx="25" cy="8"  r="2.8" fill="#FFB81C"/>
+  <circle cx="16" cy="17" r="3.2" fill="#FFB81C"/>
+  <circle cx="7"  cy="26" r="2.8" fill="#FFB81C"/>
+  <circle cx="25" cy="26" r="2.8" fill="#FFB81C"/>
+</svg>
