@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SWNE-BASE · Sewanee Base Meshtastic Node · Sewanee, TN</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple:     #582C83;
+      --purple-dk:  #3d1d5e;
+      --purple-lt:  #7a4aaa;
+      --gold:       #FFB81C;
+      --gold-dk:    #c98e00;
+      --white:      #ffffff;
+      --off-white:  #faf7ff;
+      --text:       #1a1a2e;
+      --text-light: #4a4a6a;
+      --radius:     10px;
+      --max:        780px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   Helvetica, Arial, sans-serif;
+      background: var(--off-white);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    /* ── BACK BAR ─────────────────────────────────────── */
+    .back-bar {
+      background: var(--purple-dk);
+      padding: 0.5rem 1.2rem;
+    }
+
+    .back-bar a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.15s;
+    }
+
+    .back-bar a:hover { color: var(--gold); }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      background: var(--purple);
+      color: var(--white);
+      padding: 3.5rem 1.5rem 2.5rem;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--purple-dk);
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 8vw, 3.4rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 3.5vw, 1.2rem);
+      opacity: 0.88;
+      max-width: 560px;
+      margin: 0.8rem auto 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .hero-meta {
+      margin-top: 1.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .hero-pill {
+      background: rgba(255,255,255,0.13);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ── NAV ──────────────────────────────────────────── */
+    nav {
+      background: var(--purple-dk);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 0 1rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0;
+      min-width: max-content;
+      margin: 0 auto;
+      max-width: var(--max);
+    }
+
+    nav a {
+      display: block;
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.85rem 0.9rem;
+      transition: color 0.15s, border-color 0.15s;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* ── MAIN ─────────────────────────────────────────── */
+    main {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 1.2rem 3rem;
+    }
+
+    section { margin-top: 3rem; }
+
+    .section-label {
+      display: inline-block;
+      color: var(--purple);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+
+    h2 {
+      font-size: clamp(1.4rem, 5vw, 1.9rem);
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--purple-dk);
+      margin-bottom: 1rem;
+    }
+
+    p { margin-bottom: 1rem; }
+    p:last-child { margin-bottom: 0; }
+    a { color: var(--purple); text-decoration: underline; text-underline-offset: 3px; }
+    a:hover { color: var(--gold-dk); }
+
+    .gold-rule {
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dk));
+      border: none;
+      border-radius: 999px;
+      margin: 0.6rem 0 1.4rem;
+      width: 56px;
+    }
+
+    /* ── CALLOUT ──────────────────────────────────────── */
+    .callout {
+      background: var(--purple);
+      color: var(--white);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.5rem;
+      margin: 1.4rem 0;
+    }
+
+    .callout p {
+      font-size: 1.12rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* ── NODE CARD ────────────────────────────────────── */
+    .node-card {
+      background: var(--white);
+      border: 2px solid var(--purple);
+      border-radius: var(--radius);
+      padding: 1.6rem 1.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .node-card h3 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--purple);
+      margin-bottom: 1rem;
+      font-family: "Courier New", Courier, monospace;
+      letter-spacing: 0.05em;
+    }
+
+    .node-facts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    @media (max-width: 420px) { .node-facts { grid-template-columns: 1fr; } }
+
+    .fact {
+      background: var(--off-white);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+
+    .fact-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 0.2rem;
+    }
+
+    .fact-value {
+      font-weight: 700;
+      color: var(--purple-dk);
+    }
+
+    /* ── NETWORK LINK CARD ────────────────────────────── */
+    .sibling-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--white);
+      border: 1.5px solid rgba(88,44,131,0.2);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.3rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      margin-top: 0.8rem;
+    }
+
+    .sibling-card:hover {
+      border-color: var(--purple);
+      box-shadow: 0 3px 14px rgba(88,44,131,0.12);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .sibling-id {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--purple);
+    }
+
+    .sibling-name {
+      font-size: 0.88rem;
+      color: var(--text-light);
+    }
+
+    .sibling-arrow { margin-left: auto; color: var(--purple-lt); font-weight: 700; }
+
+    /* ── STEPS ────────────────────────────────────────── */
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      margin-top: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.1rem 1.2rem;
+      box-shadow: 0 1px 4px rgba(88,44,131,0.08);
+    }
+
+    .steps li::before {
+      content: counter(step);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2rem;
+      height: 2rem;
+      background: var(--gold);
+      color: var(--purple-dk);
+      font-weight: 800;
+      font-size: 0.95rem;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.05rem;
+    }
+
+    .steps li .step-content { flex: 1; }
+    .steps li strong { display: block; color: var(--purple-dk); font-weight: 700; margin-bottom: 0.25rem; }
+    .steps li p { margin-bottom: 0; font-size: 0.95rem; }
+
+    /* ── LINK LIST ────────────────────────────────────── */
+    .link-list {
+      list-style: none;
+      margin-top: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .link-list li a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--white);
+      border: 1px solid rgba(88,44,131,0.2);
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      text-decoration: none;
+      font-weight: 600;
+      color: var(--purple);
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .link-list li a:hover {
+      background: var(--purple);
+      color: var(--white);
+      border-color: var(--purple);
+    }
+
+    .link-list li a:hover .link-desc { color: rgba(255,255,255,0.75); }
+
+    .link-arrow { margin-left: auto; flex-shrink: 0; opacity: 0.5; }
+
+    .link-desc {
+      font-size: 0.82rem;
+      font-weight: 400;
+      color: var(--text-light);
+      display: block;
+      margin-top: 0.1rem;
+    }
+
+    /* ── OSM MAP EMBED ────────────────────────────────── */
+    .osm-map-wrap {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1.5px solid rgba(88,44,131,0.18);
+      box-shadow: 0 2px 10px rgba(88,44,131,0.08);
+      margin: 1.2rem 0 0.4rem;
+    }
+
+    .osm-map-header {
+      background: var(--purple);
+      color: var(--white);
+      padding: 0.55rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .osm-map-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+
+    @media (min-width: 600px) { .osm-map-wrap iframe { height: 380px; } }
+
+    .osm-map-credit {
+      font-size: 0.72rem;
+      color: var(--text-light);
+      margin-top: 0.3rem;
+      text-align: right;
+    }
+
+    /* ── DIVIDER & FOOTER ─────────────────────────────── */
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(88,44,131,0.12);
+      margin: 3rem 0 0;
+    }
+
+    footer {
+      background: var(--purple-dk);
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.82rem;
+      line-height: 1.7;
+      margin-top: 3rem;
+    }
+
+    footer strong { color: var(--gold); font-family: "Courier New", Courier, monospace; }
+  </style>
+</head>
+<body>
+
+<!-- ── BACK BAR ────────────────────────────────────────── -->
+<div class="back-bar">
+  <a href="index.html">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Sewanee Mesh
+  </a>
+</div>
+
+<!-- ── HERO ───────────────────────────────────────────── -->
+<header class="hero">
+  <div class="hero-badge">Meshtastic Base Node</div>
+  <h1>SWNE&#8209;BASE</h1>
+  <p class="hero-sub">The anchor node of the Sewanee Mesh — a full messaging and relay node serving Sewanee, Tennessee and the surrounding plateau.</p>
+  <div class="hero-meta">
+    <div class="hero-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 1 0 20A14.5 14.5 0 0 1 12 2"/><path d="M2 12h20"/></svg>
+      Base Node
+    </div>
+    <div class="hero-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Accepts Messages
+    </div>
+    <div class="hero-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Sewanee, TN
+    </div>
+    <div class="hero-pill">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Encrypted &amp; Free
+    </div>
+  </div>
+</header>
+
+<!-- ── STICKY NAV ──────────────────────────────────────── -->
+<nav aria-label="Page sections">
+  <ul>
+    <li><a href="#about">About this node</a></li>
+    <li><a href="#network">The network</a></li>
+    <li><a href="#start">Get started</a></li>
+    <li><a href="#links">Links</a></li>
+  </ul>
+</nav>
+
+<main>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <span class="section-label">Sewanee, Tennessee</span>
+    <h2>About this node</h2>
+    <hr class="gold-rule" />
+    <p>SWNE-BASE is the primary anchor node of the Sewanee Mesh, located near the Sewanee airport in Sewanee, Tennessee on the Cumberland Plateau. Unlike a pure repeater, this is a full messaging node — it accepts messages from other users on the network and relays them across the mesh.</p>
+    <p>As the base node of the network, SWNE-BASE forms the backbone of local Meshtastic coverage, working together with the repeater at Green's View and any future nodes to blanket the Sewanee area with off-grid radio connectivity.</p>
+
+    <div class="osm-map-wrap">
+      <div class="osm-map-header">
+        <span>📍 Near Sewanee Airport, Sewanee, TN</span>
+        <span style="opacity:0.7;font-weight:400;">SWNE-BASE</span>
+      </div>
+      <iframe
+        src="https://www.openstreetmap.org/export/embed.html?bbox=-85.9300%2C35.1850%2C-85.8700%2C35.2250&amp;layer=mapnik&amp;marker=35.2040%2C-85.9060"
+        title="Map of SWNE-BASE node near Sewanee airport, Sewanee TN"
+        loading="lazy"
+        referrerpolicy="no-referrer"></iframe>
+    </div>
+    <p class="osm-map-credit">
+      Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> &nbsp;·&nbsp;
+      <a href="https://www.openstreetmap.org/#map=14/35.2040/-85.9060" target="_blank" rel="noopener">View larger map ↗</a>
+    </p>
+
+    <div class="node-card">
+      <h3>SWNE-BASE</h3>
+      <div class="node-facts">
+        <div class="fact">
+          <div class="fact-label">Role</div>
+          <div class="fact-value">Base / Gateway node</div>
+        </div>
+        <div class="fact">
+          <div class="fact-label">Location</div>
+          <div class="fact-value">Near Sewanee Airport, TN</div>
+        </div>
+        <div class="fact">
+          <div class="fact-label">Messaging</div>
+          <div class="fact-value">Yes — accepts messages</div>
+        </div>
+        <div class="fact">
+          <div class="fact-label">Network</div>
+          <div class="fact-value">Meshtastic / LoRa</div>
+        </div>
+      </div>
+      <p>SWNE-BASE serves as both a relay and a reachable node. If you're in Sewanee with a Meshtastic device, you can send messages to and through this node. It relays all traffic it hears, extending the mesh for every user in range.</p>
+    </div>
+  </section>
+
+  <!-- THE NETWORK -->
+  <section id="network">
+    <span class="section-label">Sewanee Mesh</span>
+    <h2>Part of a larger network</h2>
+    <hr class="gold-rule" />
+    <p>SWNE-BASE is one node in the growing Sewanee Mesh. Each node extends coverage for every other user. Together they create a resilient, decentralized communication network across the plateau.</p>
+
+    <a class="sibling-card" href="swne-grvw.html">
+      <div>
+        <div class="sibling-id">SWNE-GRVW</div>
+        <div class="sibling-name">Green's View · Solar-powered repeater</div>
+      </div>
+      <span class="sibling-arrow">→</span>
+    </a>
+
+    <p style="margin-top:1.2rem;">The Sewanee Mesh is designed to grow. Each new node — whether a stationary repeater like SWNE-GRVW or a portable device carried by a hiker — strengthens the network for everyone. <a href="index.html#start">See how to add your own device.</a></p>
+
+    <div class="callout">
+      <p>Meshtastic works when nothing else does. No subscription. No towers. No single point of failure.</p>
+    </div>
+  </section>
+
+  <!-- GET STARTED -->
+  <section id="start">
+    <span class="section-label">Join the mesh</span>
+    <h2>How to get started</h2>
+    <hr class="gold-rule" />
+    <p>Getting onto the Meshtastic network takes about an hour and costs around $30–$60 for hardware. Here's the basic path:</p>
+
+    <ol class="steps">
+      <li>
+        <div class="step-content">
+          <strong>Get a device</strong>
+          <p>Meshtastic runs on a variety of inexpensive LoRa-capable hardware. Popular options include the LILYGO T-Beam, Heltec WiFi LoRa 32, and RAK WisBlock. Available on Amazon for $30–$60.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <strong>Flash the firmware</strong>
+          <p>Install Meshtastic directly from your browser at <a href="https://flasher.meshtastic.org" target="_blank" rel="noopener">flasher.meshtastic.org</a> — no software installation needed.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <strong>Install the app</strong>
+          <p>Download the free Meshtastic app for <a href="https://apps.apple.com/us/app/meshtastic/id1586432531" target="_blank" rel="noopener">iOS</a> or <a href="https://play.google.com/store/apps/details?id=com.geeksville.mesh" target="_blank" rel="noopener">Android</a> and pair your device via Bluetooth.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <strong>Start messaging</strong>
+          <p>The default public channel is called <em>LongFast</em>. If you're in Sewanee with your device, you should be able to reach SWNE-BASE and the rest of the local mesh right away.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- LINKS -->
+  <section id="links">
+    <span class="section-label">Go deeper</span>
+    <h2>Learn more</h2>
+    <hr class="gold-rule" />
+    <ul class="link-list">
+      <li><a href="https://meshtastic.org" target="_blank" rel="noopener">
+        <div>Meshtastic.org <span class="link-desc">Official project site, documentation, and community hub</span></div>
+        <svg class="link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a></li>
+      <li><a href="https://meshtastic.org/docs/getting-started/" target="_blank" rel="noopener">
+        <div>Getting Started Guide <span class="link-desc">Step-by-step from zero — hardware, firmware, first message</span></div>
+        <svg class="link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a></li>
+      <li><a href="https://meshmap.net" target="_blank" rel="noopener">
+        <div>Meshmap.net <span class="link-desc">Live map of Meshtastic nodes worldwide — find nodes near you</span></div>
+        <svg class="link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a></li>
+      <li><a href="https://www.reddit.com/r/meshtastic/" target="_blank" rel="noopener">
+        <div>r/meshtastic on Reddit <span class="link-desc">Community Q&amp;A, project showcases, and troubleshooting</span></div>
+        <svg class="link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a></li>
+      <li><a href="https://discord.gg/ktMAKGBnBs" target="_blank" rel="noopener">
+        <div>Meshtastic Discord <span class="link-desc">Live community chat — ask questions, share projects</span></div>
+        <svg class="link-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      </a></li>
+    </ul>
+  </section>
+
+  <hr class="divider" />
+</main>
+
+<footer>
+  <strong>SWNE-BASE</strong> · Sewanee, Tennessee<br>
+  <span style="margin-top:0.4rem;display:block;">Part of the <a href="index.html" style="color:var(--gold);">Sewanee Mesh</a> network. Meshtastic is a free, open-source project.<br>This page has no affiliation with the University of the South.</span>
+</footer>
+
+</body>
+</html>
